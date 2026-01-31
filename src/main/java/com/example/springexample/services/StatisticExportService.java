@@ -2,7 +2,7 @@ package com.example.springexample.services;
 
 
 
-import com.example.springexample.model.StatisticEntity;
+import com.example.springexample.model.Statistic;
 
 import com.example.springexample.repository.StatisticRepository;
 import com.opencsv.CSVWriter;
@@ -29,7 +29,7 @@ public class StatisticExportService {
     private final StatisticRepository statisticRepository;
 
     public ResponseEntity<Resource> exportStatisticsToCsv() {
-        List<StatisticEntity> events = statisticRepository.findAll();
+        List<Statistic> events = statisticRepository.findAll();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try (CSVWriter writer = new CSVWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8))) {
             String[] header = {
@@ -46,7 +46,7 @@ public class StatisticExportService {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-            for (StatisticEntity event : events) {
+            for (Statistic event : events) {
                 String[] row = new String[8];
                 row[0] = event.getId().toString();
                 row[1] = event.getEventType();

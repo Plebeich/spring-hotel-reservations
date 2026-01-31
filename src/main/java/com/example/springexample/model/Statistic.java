@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StatisticEntity {
+public class Statistic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "event_type", nullable = false)
     private String eventType; // "user registered" или "room booked"    переделать в enum

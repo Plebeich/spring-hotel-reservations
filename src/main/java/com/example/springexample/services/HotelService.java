@@ -5,7 +5,7 @@ import com.example.springexample.dto.*;
 import com.example.springexample.exeption.BadRequestException;
 import com.example.springexample.exeption.CastomException;
 import com.example.springexample.mapper.HotelMapper;
-import com.example.springexample.model.ModelHotel;
+import com.example.springexample.model.Hotel;
 import com.example.springexample.repository.HotelRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.*;
-
-
 
 
 import java.util.List;
@@ -34,14 +31,14 @@ public class HotelService {
 
     @Transactional
     public HotelResponse createHotel(HotelRequest request){
-        ModelHotel hotel = hotelMapper.toEntity(request);
-        ModelHotel savedHotel = hotelRepository.save(hotel);
+        Hotel hotel = hotelMapper.toEntity(request);
+        Hotel savedHotel = hotelRepository.save(hotel);
         return hotelMapper.toResponseDTO(savedHotel);
     }
 
     public HotelResponse getHotelById(int id){  //otel po id
         System.out.println("Поиск отеля по ID - " + id);
-        ModelHotel hotel = hotelRepository.findById(id).orElseThrow(() -> new CastomException("Hotel", "id", id));
+        Hotel hotel = hotelRepository.findById(id).orElseThrow(() -> new CastomException("Hotel", "id", id));
         return hotelMapper.toResponseDTO(hotel);
     }
 
@@ -54,7 +51,7 @@ public class HotelService {
     @Transactional
     public HotelResponse updateHotel(int id, HotelRequest request){
 
-        ModelHotel hotel = hotelRepository.findById(id).orElseThrow(() -> new CastomException("Hotel", "id", id));
+        Hotel hotel = hotelRepository.findById(id).orElseThrow(() -> new CastomException("Hotel", "id", id));
         hotelMapper.updateEntity(request,hotel);
         System.out.println("Отель " + id + " изменён");
         return hotelMapper.toResponseDTO(hotelRepository.save(hotel));
@@ -78,7 +75,7 @@ public class HotelService {
             throw new BadRequestException("Допустимый рейтинг отеля с 1 до 5");
         }
 
-        ModelHotel hotel = hotelRepository.findById(hotelId)
+        Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new CastomException("Hotel", "id", hotelId));
         double currentRating = hotel.getRating();
         int currentReviewsCount = hotel.getReviewsCount();
@@ -91,14 +88,14 @@ public class HotelService {
         hotel.setRating(newAverageRating);
         hotel.setReviewsCount(newReviewsCount);
 
-        ModelHotel updatedHotel = hotelRepository.save(hotel);
+        Hotel updatedHotel = hotelRepository.save(hotel);
         log.info("рейтинг отеля: " + hotelId + " изменён на - " + newAverageRating + " количество отзывов - " + newReviewsCount);
 
         return hotelMapper.toResponseDTO(updatedHotel);
     }
 
     public HotelRatingResponse getHotelRatingInfo(Integer hotelId) {
-        ModelHotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new CastomException("Hotel", "id", hotelId));
+        Hotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new CastomException("Hotel", "id", hotelId));
         HotelRatingResponse response = new HotelRatingResponse();
         response.setHotelId(hotel.getId());
         response.setHotelName(hotel.getName());
@@ -110,9 +107,9 @@ public class HotelService {
 
     public PageResponse<HotelResponse> searchHotels(HotelFilter filter, int page, int size) {
         System.out.println("поиск отеля по фильтру: " + filter + " " + page + " " + size);
-        Specification<ModelHotel> spec = HotelSpecification.withFilter(filter);
+        Specification<Hotel> spec = HotelSpecification.withFilter(filter);
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
-        Page<ModelHotel> hotelPage = hotelRepository.findAll(spec, pageable);
+        Page<Hotel> hotelPage = hotelRepository.findAll(spec, pageable);
 
         List<HotelResponse> content = hotelPage.getContent().stream()
                 .map(hotelMapper::toResponseDTO)

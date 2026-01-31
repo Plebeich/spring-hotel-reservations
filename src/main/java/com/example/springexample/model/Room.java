@@ -28,5 +28,5 @@ public class Room {
     private int maxGuests;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id",nullable = false)
-    private ModelHotel hotel;
+    private Hotel hotel;
 }

@@ -1,7 +1,7 @@
 package com.example.springexample.config;
 
 import com.example.springexample.dto.HotelFilter;
-import com.example.springexample.model.ModelHotel;
+import com.example.springexample.model.Hotel;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HotelSpecification {
-    public static Specification<ModelHotel> withFilter(HotelFilter filter) {
+    public static Specification<Hotel> withFilter(HotelFilter filter) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 

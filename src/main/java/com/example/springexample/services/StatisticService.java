@@ -1,6 +1,6 @@
 package com.example.springexample.services;
 
-import com.example.springexample.model.StatisticEntity;
+import com.example.springexample.model.Statistic;
 import com.example.springexample.repository.StatisticRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class StatisticService {
             return;
         }
 
-        StatisticEntity statistic = new StatisticEntity();
+        Statistic statistic = new Statistic();
         statistic.setEventType("USER_REGISTERED");
         statistic.setUserId(userId);
         statistic.setAdditionalData("время регистрации пользователя"+ LocalDate.now());
@@ -40,7 +40,7 @@ public class StatisticService {
             return;
         }
 
-        StatisticEntity statistic = new StatisticEntity();
+        Statistic statistic = new Statistic();
         statistic.setEventType("ROOM_BOOKED");
         statistic.setUserId(userId);
         statistic.setRoomId(roomId);

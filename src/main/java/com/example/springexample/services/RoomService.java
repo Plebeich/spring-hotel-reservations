@@ -8,7 +8,7 @@ import com.example.springexample.dto.RoomResponse;
 import com.example.springexample.exeption.BadRequestException;
 import com.example.springexample.exeption.CastomException;
 import com.example.springexample.mapper.RoomMapper;
-import com.example.springexample.model.ModelHotel;
+import com.example.springexample.model.Hotel;
 import com.example.springexample.model.Room;
 import com.example.springexample.repository.HotelRepository;
 import com.example.springexample.repository.RoomRepository;
@@ -37,7 +37,7 @@ public class RoomService {
     @Transactional
     public RoomResponse createRoom(RoomRequest request){
         System.out.println("Создание комнаты: " + request.getName() + "в отеле: " + request.getHotelId());
-        ModelHotel hotel = hotelRepository.findById(request.getHotelId()).orElseThrow(() -> new CastomException("hotel", "id", request.getHotelId()));
+        Hotel hotel = hotelRepository.findById(request.getHotelId()).orElseThrow(() -> new CastomException("hotel", "id", request.getHotelId()));
         if (roomRepository.existsByNumberAndHotelId(request.getNumber(), request.getHotelId())){
             throw new BadRequestException("Номер" + request.getNumber() + " уже существует");
         }
