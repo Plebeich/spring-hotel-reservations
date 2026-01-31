@@ -77,12 +77,11 @@ public class RoomService {
     @Transactional
     public void deleteRoom(int id){
         System.out.println("удаление комнаты с ID: " + id);
-        if (roomRepository.existsById(id)){
-            roomRepository.deleteById(id);
+        if (!roomRepository.existsById(id)){
+            throw new CastomException("Room", "id", id);
         }
-        else {
-            System.out.println("введена не верная комната ");
-        }
+        roomRepository.deleteById(id);
+        System.out.println("комната " + id + " удалена");
     }
 
     public PageResponse<RoomResponse> searchRooms(RoomFilter filter, int page, int size) {

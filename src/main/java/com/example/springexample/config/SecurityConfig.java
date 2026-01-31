@@ -29,18 +29,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)  // Отключаем CSRF для API
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         // Публичные endpoints
                         .requestMatchers("/api/users/register").permitAll()
-                        .requestMatchers("/api/hotels/**").permitAll()  // временно разрешим все
-                        .requestMatchers("/api/rooms/**").permitAll()   // временно разрешим все
-                        .requestMatchers("/api/bookings/availability").permitAll()  // проверка доступности
-
-                        // Все остальные запросы требуют аутентификации
+                        .requestMatchers("/api/hotels/**").permitAll()
+                        .requestMatchers("/api/rooms/**").permitAll()
+                        .requestMatchers("/api/bookings/availability").permitAll()
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults())  // Используем Basic Auth
+                .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // Stateless сессии
                 );

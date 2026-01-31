@@ -124,7 +124,6 @@ public class BookingService {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new CastomException("Booking", "id", id));
 
-        // Валидация дат
         if (!request.isValid()) {
             throw new BadRequestException("Не корректная дата заселение");
         }

@@ -1,10 +1,7 @@
 package com.example.springexample.services;
 
 import com.example.springexample.config.HotelSpecification;
-import com.example.springexample.dto.HotelFilter;
-import com.example.springexample.dto.HotelRequest;
-import com.example.springexample.dto.HotelResponse;
-import com.example.springexample.dto.PageResponse;
+import com.example.springexample.dto.*;
 import com.example.springexample.exeption.BadRequestException;
 import com.example.springexample.exeption.CastomException;
 import com.example.springexample.mapper.HotelMapper;
@@ -23,9 +20,8 @@ import org.springframework.data.domain.*;
 
 
 
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +36,6 @@ public class HotelService {
     public HotelResponse createHotel(HotelRequest request){
         ModelHotel hotel = hotelMapper.toEntity(request);
         ModelHotel savedHotel = hotelRepository.save(hotel);
-
         return hotelMapper.toResponseDTO(savedHotel);
     }
 
@@ -61,9 +56,8 @@ public class HotelService {
 
         ModelHotel hotel = hotelRepository.findById(id).orElseThrow(() -> new CastomException("Hotel", "id", id));
         hotelMapper.updateEntity(request,hotel);
-        ModelHotel updatedHotel = hotelRepository.save(hotel);
         System.out.println("Отель " + id + " изменён");
-        return hotelMapper.toResponseDTO(updatedHotel);
+        return hotelMapper.toResponseDTO(hotelRepository.save(hotel));
     }
 
     @Transactional
@@ -103,17 +97,15 @@ public class HotelService {
         return hotelMapper.toResponseDTO(updatedHotel);
     }
 
-    public Map<String, Object> getHotelRatingInfo(Integer hotelId) {
-        ModelHotel hotel = hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new CastomException("Hotel", "id", hotelId));
+    public HotelRatingResponse getHotelRatingInfo(Integer hotelId) {
+        ModelHotel hotel = hotelRepository.findById(hotelId).orElseThrow(() -> new CastomException("Hotel", "id", hotelId));
+        HotelRatingResponse response = new HotelRatingResponse();
+        response.setHotelId(hotel.getId());
+        response.setHotelName(hotel.getName());
+        response.setCurrentRating(hotel.getRating());
+        response.setNumberRatings(hotel.getReviewsCount());
 
-        Map<String, Object> ratingInfo = new HashMap<>();
-        ratingInfo.put("hotelId", hotelId);
-        ratingInfo.put("hotelName", hotel.getName());
-        ratingInfo.put("currentRating", hotel.getRating());
-        ratingInfo.put("totalReviews", hotel.getReviewsCount());
-
-        return ratingInfo;
+        return response;
     }
 
     public PageResponse<HotelResponse> searchHotels(HotelFilter filter, int page, int size) {

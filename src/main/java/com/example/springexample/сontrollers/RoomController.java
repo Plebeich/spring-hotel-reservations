@@ -22,50 +22,44 @@ public class RoomController {
     private final RoomService roomService;
 
     @PostMapping
-    public ResponseEntity<RoomResponse> createRoom(@Valid @RequestBody RoomRequest request){
-        RoomResponse response = roomService.createRoom(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public RoomResponse createRoom(@Valid @RequestBody RoomRequest request){
+        return roomService.createRoom(request);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<RoomResponse> getRoom(@PathVariable Integer id) {
-        RoomResponse response = roomService.getRoomById(id);
-        return ResponseEntity.ok(response);
+    public RoomResponse getRoom(@PathVariable Integer id) {
+        return roomService.getRoomById(id);
     }
 
     @GetMapping
-    public ResponseEntity<List<RoomResponse>> getAllRooms() {
-        List<RoomResponse> rooms = roomService.getAllRooms();
-        return ResponseEntity.ok(rooms);
+    public List<RoomResponse> getAllRooms() {
+        return roomService.getAllRooms();
     }
 
     @GetMapping("/hotel/{hotelId}")
-    public ResponseEntity<List<RoomResponse>> getRoomsByHotel(@PathVariable Integer hotelId) {
-        List<RoomResponse> rooms = roomService.bookRooms(hotelId);
-        return ResponseEntity.ok(rooms);
+    public List<RoomResponse> getRoomsByHotel(@PathVariable Integer hotelId) {
+        return roomService.bookRooms(hotelId);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RoomResponse> updateRoom(@PathVariable Integer id, @Valid @RequestBody RoomRequest request) {
-        RoomResponse response = roomService.updateRoom(id, request);
-        return ResponseEntity.ok(response);
+    public RoomResponse updateRoom(@PathVariable Integer id, @Valid @RequestBody RoomRequest request) {
+        return roomService.updateRoom(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRoom(@PathVariable Integer id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRoom(@PathVariable Integer id) {
         roomService.deleteRoom(id);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/search")
-    public ResponseEntity<PageResponse<RoomResponse>> searchRooms(
+    public PageResponse<RoomResponse> searchRooms(
             @ModelAttribute RoomFilter filter,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-
-        PageResponse<RoomResponse> response = roomService.searchRooms(filter, page, size);
-        return ResponseEntity.ok(response);
+        return roomService.searchRooms(filter, page, size);
     }
 
 }

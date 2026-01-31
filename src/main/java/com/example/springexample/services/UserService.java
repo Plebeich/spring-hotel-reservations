@@ -67,7 +67,7 @@ public class UserService {
     @Transactional
     public UserResponse updateUser(int id, UserRequest request){
         System.out.println("Обновление данных пользователя ID: " + id);
-        User user = userRepository.findById(id).orElseThrow(() -> new CastomException("User", "username", id));
+        User user = userRepository.findById(id).orElseThrow(() -> new CastomException("User", "id", id));
         if (userRepository.existsByUsername(request.getUsername())){
             throw new BadRequestException("Имя: " + request.getUsername() + "занято");
         }

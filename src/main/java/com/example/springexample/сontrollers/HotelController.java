@@ -19,57 +19,48 @@ public class HotelController {
     private final HotelService hotelService;
 
     @PostMapping
-    public ResponseEntity<HotelResponse> createHotel(@Valid @RequestBody HotelRequest request){
-        HotelResponse response = hotelService.createHotel(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public HotelResponse createHotel(@RequestBody HotelRequest request){
+        return hotelService.createHotel(request);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HotelResponse> getHotel(@PathVariable int id){
-        HotelResponse response = hotelService.getHotelById(id);
-        return ResponseEntity.ok(response);
+    public HotelResponse getHotel(@PathVariable int id){
+        return hotelService.getHotelById(id);
     }
 
     @GetMapping()
-    public ResponseEntity<List<HotelResponse>> getAllHotels(){
-        List<HotelResponse> hotels = hotelService.getAllHotels();
-        return ResponseEntity.ok(hotels);
+    public List<HotelResponse> getAllHotels(){
+        return hotelService.getAllHotels();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HotelResponse> updateHotel(@PathVariable int id,@Valid @RequestBody HotelRequest request){
-        HotelResponse response = hotelService.updateHotel(id, request);
-        return ResponseEntity.ok(response);
+    public HotelResponse updateHotel(@PathVariable int id,@Valid @RequestBody HotelRequest request){
+        return hotelService.updateHotel(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteHotel(@PathVariable int id){
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteHotel(@PathVariable int id){
         hotelService.deleteHotel(id);
-        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{id}/rate")
-    public ResponseEntity<HotelResponse> rateHotel(
-            @PathVariable Integer id,
-            @Valid @RequestBody RatingRequest ratingRequest) {
-        HotelResponse response = hotelService.rateHotel(id, ratingRequest.getRating());
-        return ResponseEntity.ok(response);
+    public HotelResponse rateHotel(@PathVariable Integer id, @Valid @RequestBody RatingRequest ratingRequest) {
+        return hotelService.rateHotel(id, ratingRequest.getRating());
     }
 
     @GetMapping("/{id}/rating")
-    public ResponseEntity<Map<String, Object>> getHotelRating(@PathVariable Integer id) {
-        Map<String, Object> ratingInfo = hotelService.getHotelRatingInfo(id);
-        return ResponseEntity.ok(ratingInfo);
+    public HotelRatingResponse getHotelRating(@PathVariable Integer id) {
+        return hotelService.getHotelRatingInfo(id);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<PageResponse<HotelResponse>> searchHotels(
+    public PageResponse<HotelResponse> searchHotels(
             @ModelAttribute HotelFilter filter,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-
-        PageResponse<HotelResponse> response = hotelService.searchHotels(filter, page, size);
-        return ResponseEntity.ok(response);
+        return hotelService.searchHotels(filter,page,size);
     }
 
 

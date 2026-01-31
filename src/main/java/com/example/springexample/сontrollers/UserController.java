@@ -19,41 +19,35 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRequest request){
-        UserResponse response = userService.createUser(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserResponse registerUser(@Valid @RequestBody UserRequest request){
+        return userService.createUser(request);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable int id){
-        UserResponse response = userService.getUsserById(id);
-        return ResponseEntity.ok(response);
+    public UserResponse getUser(@PathVariable int id){
+        return userService.getUsserById(id);
     }
 
     @GetMapping("/username/{username}")
-    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) {
-        UserResponse response = userService.getUserByUsername(username);
-        return ResponseEntity.ok(response);
+    public UserResponse getUserByUsername(@PathVariable String username) {
+        return userService.getUserByUsername(username);
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public List<UserResponse> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(
-            @PathVariable Integer id,
-            @Valid @RequestBody UserRequest request) {
-        UserResponse response = userService.updateUser(id, request);
-        return ResponseEntity.ok(response);
+    public UserResponse updateUser(@PathVariable Integer id, @Valid @RequestBody UserRequest request) {
+        return userService.updateUser(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
     }
 
 
